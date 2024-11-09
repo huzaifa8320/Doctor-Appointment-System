@@ -1,8 +1,8 @@
 'use client'
 
 import { doctors } from "@/lib/Data";
-import { CheckCircleOutlined, CalendarOutlined, MedicineBoxOutlined, UserOutlined, SettingOutlined, EditOutlined, EllipsisOutlined } from "@ant-design/icons";
-import { Avatar, Card, Col, Row } from 'antd';
+import { SettingOutlined, EditOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { Avatar, Card } from 'antd';
 import Meta from "antd/es/card/Meta";
 import Aos from "aos";
 import { useEffect } from "react";

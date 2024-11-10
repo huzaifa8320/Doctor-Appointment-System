@@ -95,6 +95,7 @@ export default function DoctorSection() {
                 {doctors.map((doctor, index) => (
                     <Card data-aos="zoom-in"
                         hoverable
+                        key={index}
                         className="p-5"
                         cover={
                             <div className="rounded">

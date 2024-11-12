@@ -29,7 +29,7 @@ export default function DoctorSection({ isHome }) {
                     Doctors Available
                 </p>
                 {isHome &&
-                    <Link href={'/doctor'}><button className="bg-[#1E3A8A] h-10 w-20 rounded-md text-white">See All</button></Link>
+                    <Link href={'/doctors'}><button className="bg-[#1E3A8A] h-10 w-20 rounded-md text-white">See All</button></Link>
                 }
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:px-5 md:px-14">
@@ -45,8 +45,8 @@ export default function DoctorSection({ isHome }) {
                                     width={500}
                                     height={500}
                                     alt="example"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    className="h-[180px] w-[180px]  shadow border m-auto  rounded-full" // Make image responsive
+                                    src={doctor.image}
+                                    className="h-[180px] w-[180px]  shadow object-cover border m-auto  rounded-full"
                                 />
                             </div>
                         }
@@ -56,7 +56,7 @@ export default function DoctorSection({ isHome }) {
                                 className={`${isHome && 'text-center'}`}
                                 avatar={
                                     !isHome &&
-                                    <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />}
+                                    <Avatar src={doctor.image} />}
                                 title={<span className="text-[#1E3A8A]">{doctor.name}</span>}
                                 description={<span style={{ color: 'gray' }}>{doctor.specialist}</span>}
                             />

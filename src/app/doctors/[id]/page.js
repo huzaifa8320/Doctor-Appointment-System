@@ -68,8 +68,8 @@ export default function DoctorDetail({ params }) {
             </section>
 
             {/* Doctor Details Section */}
-            <section data-aos="zoom-in" className="container px-3 sm:px-10 mx-auto py-16">
-                <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
+            <section className="bg-white container px-3 sm:px-10 mx-auto py-16">
+                <div data-aos="zoom-in" className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
                     {/* Left Section (Details) */}
                     <div className="md:w-2/3 p-6">
                         <h2 className="text-2xl font-semibold text-[#1E3A8A]">

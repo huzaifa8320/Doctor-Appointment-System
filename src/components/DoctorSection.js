@@ -1,38 +1,45 @@
 'use client'
 
-import { SettingOutlined, EditOutlined, EllipsisOutlined } from "@ant-design/icons";
 import { Avatar, Card } from 'antd';
 import Meta from "antd/es/card/Meta";
 import Aos from "aos";
 import { useEffect } from "react";
-import 'aos/dist/aos.css'; // Import AOS styles
+import 'aos/dist/aos.css';
 import Image from "next/image";
 import { doctors } from "@/lib/Data";
+import Link from "next/link";
 
-export default function DoctorSection() {
+export default function DoctorSection({ isHome }) {
 
-    
+    const filter_doctor = isHome ? doctors.slice(0, 3) : doctors;
 
     useEffect(() => {
         Aos.init({
-            duration: 700, // Animation duration in milliseconds
-            easing: 'ease-in-out', // Easing option
-            once: false, // Animation only happens once on scroll
+            duration: 700,
+            easing: 'ease-in-out',
+            once: false,
         });
     }, []);
 
     return (
         <div className="px-3 bg-gray-100">
-            <p className="text-center text-3xl text-[#1E3A8A] sm:text-4xl p-5 pt-10 font-semibold">
-                Doctors Available
-            </p>
+            <div className="flex py-10 justify-between items-center sm:px-14">
+
+                <p className="text-center text-xl text-[#1E3A8A] sm:text-4xl font-semibold">
+                    Doctors Available
+                </p>
+                {isHome &&
+                    <Link href={'/doctor'}><button className="bg-[#1E3A8A] h-10 w-20 rounded-md text-white">See All</button></Link>
+                }
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:px-5 md:px-14">
-                {doctors.map((doctor, index) => (
+                {filter_doctor.map((doctor, index) => (
                     <Card data-aos="zoom-in"
                         hoverable
                         key={index}
-                        className="p-5"
+                        className="p-4"
                         cover={
+                            isHome &&
                             <div className="rounded">
                                 <Image
                                     width={500}
@@ -44,14 +51,28 @@ export default function DoctorSection() {
                             </div>
                         }
                     >
-                        <div className="flex gap-3 flex-col">
+                        <div className="mb-5">
                             <Meta
-                                className="text-center"
-                                title={<span style={{ color: '#1E3A8A' }}>{doctor.name}</span>}
+                                className={`${isHome && 'text-center'}`}
+                                avatar={
+                                    !isHome &&
+                                    <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />}
+                                title={<span className="text-[#1E3A8A]">{doctor.name}</span>}
                                 description={<span style={{ color: 'gray' }}>{doctor.specialist}</span>}
                             />
-                            <button className="bg-[#1E3A8A] hover:bg-[#2B4FB2] hover:scale-105 duration-150 mx-auto text-white w-36 h-11 rounded-md">See Details</button>
                         </div>
+                        {!isHome &&
+                            <div className="text-gray-600 space-y-3 mt-2 text-sm">
+                                <p><strong>Appointment Time:</strong> {doctor.appointmentTime}</p>
+                                <p><strong>Fees:</strong> ${doctor.fees}</p>
+                                <p><strong>Hospital:</strong> {doctor.hospital}</p>
+                                <p><strong>Gender:</strong> {doctor.gender}</p>
+                            </div>
+                        }
+                            <Link className='flex' href={`/doctors/${doctor.id}`}>
+
+                                <button className={`bg-[#1E3A8A] font-semibold hover:bg-[#2B4FB2] ${!isHome && 'mt-5'} hover:scale-105 duration-150 ${isHome && 'mx-auto'} text-white w-36 h-11 rounded-md`}>Book Appointment</button>
+                            </Link>
                     </Card>
 
                 ))}

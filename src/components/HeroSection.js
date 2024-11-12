@@ -4,15 +4,15 @@ import Aos from "aos";
 import Image from "next/image";
 import { useEffect } from "react";
 import { ReactTyped } from "react-typed";
-import 'aos/dist/aos.css'; // Import AOS styles
+import 'aos/dist/aos.css';
 
 export default function HeroSection() {
 
     useEffect(() => {
         Aos.init({
-          duration: 700, // Animation duration in milliseconds
-          easing: 'ease-in-out', // Easing option
-          once: false, // Animation only happens once on scroll
+          duration: 700,
+          easing: 'ease-in-out',
+          once: false, 
         });
       }, []);
 

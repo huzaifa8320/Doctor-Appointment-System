@@ -2,11 +2,16 @@
 
 import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Navbar() {
+
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const pathname = usePathname();
+    console.log(pathname);
 
     const toggleProfileMenu = () => {
         setIsProfileOpen(!isProfileOpen);
@@ -31,15 +36,15 @@ export default function Navbar() {
                         >
                             <span className="sr-only">Open main menu</span>
                             {isMobileMenuOpen ? (
-                                <CloseOutlined className='text-white'/>
+                                <CloseOutlined className='text-white' />
                             ) : (
-                                <MenuOutlined className='text-white'/>
+                                <MenuOutlined className='text-white' />
                             )}
                         </button>
                     </div>
                     <div className="flex flex-1 items-center sm:justify-between justify-between">
                         <div className="flex shrink-0 gap-2 items-center">
-                            <div className='bg-white rounded-full p-1 shadow'> 
+                            <div className='bg-white rounded-full p-1 shadow'>
                                 <Image
                                     className="h-8 w-auto"
                                     src="/Web_logo.png"
@@ -52,18 +57,22 @@ export default function Navbar() {
                         </div>
                         <div className="hidden ms-auto sm:ml-6 sm:block">
                             <div className="flex space-x-4">
-                                <a href="#" className="rounded-md px-3 py-2 bg-blue-600 hover:bg-blue-700 text-sm font-medium text-white" aria-current="page">
-                                    Dashboard
-                                </a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
-                                    Team
-                                </a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
+                                <Link href="/" className={`rounded-md px-5 py-2 ${pathname == '/' && 'bg-blue-600 text-white'} text-gray-300 hover:bg-blue-700 hover:text-white text-sm font-medium`} aria-current="page">
+                                    Home
+                                </Link>
+                                <Link
+                                    href={`/doctors`} 
+                                    className={`rounded-md px-5 py-2 text-sm font-medium ${pathname.startsWith('/doctors') && 'bg-blue-600 text-white' } text-gray-300 hover:bg-blue-700 hover:text-white`}
+                                >
+                                    Doctors
+                                </Link>
+
+                                <Link href="/doctor" className="rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
                                     Projects
-                                </a>
-                                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
+                                </Link>
+                                <Link href="#" className="rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
                                     Calendar
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -118,18 +127,18 @@ export default function Navbar() {
             {/* Animated Mobile Menu */}
             <div className={`${isMobileMenuOpen ? 'max-h-screen' : 'max-h-0'} sm:hidden overflow-hidden transition-all duration-300 ease-in-out`}>
                 <div className="space-y-1 px-2 pb-3 pt-2">
-                    <a href="#" className="block rounded-md px-3 py-2 bg-blue-600 hover:bg-blue-700 text-sm font-medium text-white" aria-current="page">
-                        Dashboard
-                    </a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
-                        Team
-                    </a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
+                    <Link href="/" className={`block rounded-md px-5 py-2 ${pathname == '/' && 'bg-blue-600 text-white'} text-gray-300 hover:text-white hover:bg-blue-700 text-sm font-medium `} aria-current="page">
+                        Home
+                    </Link>
+                    <Link href="/doctors" className={`block rounded-md px-5 py-2 ${pathname.startsWith('/doctors') && 'bg-blue-600 text-white' } text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                        Doctors
+                    </Link>
+                    <Link href="#" className={`block rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
                         Projects
-                    </a>
-                    <a href="#" className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
+                    </Link>
+                    <Link href="#" className={`block rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
                         Calendar
-                    </a>
+                    </Link>
                 </div>
             </div>
         </nav>

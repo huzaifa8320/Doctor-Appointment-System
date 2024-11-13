@@ -18,13 +18,12 @@ export default function DoctorDetail({ params }) {
         });
       }, []);
 
-    console.log("Param", params);
     const doctorInfo = doctors.find((doctor) => doctor.id == params.id)
     return (
         <div className="min-h-screen pt-16">
 
             {/* Hero Section */}
-            <section className="relative px-3 sm:px-10 bg-gradient-to-r from-[#1E3A8A] to-[#3b82f6] text-white py-20">
+            <section className="relative px-2 sm:px-16 bg-gradient-to-r from-[#1E3A8A] to-[#3b82f6] text-white py-20">
                 <div className="container overflow-x-hidden mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
                     {/* Left Section (Doctor Info) */}
                     <div data-aos="fade-right" className="w-full md:w-1/2 text-left">
@@ -68,7 +67,7 @@ export default function DoctorDetail({ params }) {
             </section>
 
             {/* Doctor Details Section */}
-            <section className="bg-white container px-3 sm:px-10 mx-auto py-16">
+            <section className="bg-white container px-2 sm:px-16 mx-auto py-16">
                 <div data-aos="zoom-in" className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
                     {/* Left Section (Details) */}
                     <div className="md:w-2/3 p-6">

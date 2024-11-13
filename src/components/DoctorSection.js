@@ -22,7 +22,7 @@ export default function DoctorSection({ isHome }) {
     }, []);
 
     return (
-        <div className="px-3 bg-gray-100">
+        <div className="px-3 pb-10 bg-gray-100">
             <div className="flex py-10 justify-between items-center sm:px-14">
 
                 <p className="text-center text-xl text-[#1E3A8A] sm:text-4xl font-semibold">

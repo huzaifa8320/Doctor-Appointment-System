@@ -11,7 +11,6 @@ export default function Navbar() {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
-    console.log(pathname);
 
     const toggleProfileMenu = () => {
         setIsProfileOpen(!isProfileOpen);
@@ -67,11 +66,11 @@ export default function Navbar() {
                                     Doctors
                                 </Link>
 
-                                <Link href="/doctor" className="rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
-                                    Projects
+                                <Link href="/appointments" className={`rounded-md px-5 py-2 ${pathname == '/appointments' && 'bg-blue-600 text-white'} text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                                    Appointments
                                 </Link>
-                                <Link href="#" className="rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white">
-                                    Calendar
+                                <Link href="/contact-us" className={`rounded-md px-5 py-2 ${pathname == '/contact-us' && 'bg-blue-600 text-white'} text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                                    Contact Us
                                 </Link>
                             </div>
                         </div>
@@ -108,15 +107,15 @@ export default function Navbar() {
                                         aria-orientation="vertical"
                                         aria-labelledby="user-menu-button"
                                     >
-                                        <a href="#" className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
+                                        <Link href="/profile" onClick={()=> setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
                                             Your Profile
-                                        </a>
-                                        <a href="#" className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
+                                        </Link>
+                                        <Link href="#" onClick={()=> setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
                                             Settings
-                                        </a>
-                                        <a href="#" className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
+                                        </Link>
+                                        <Link href="#" onClick={()=> setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
                                             Sign out
-                                        </a>
+                                        </Link>
                                     </div>
                                 )}
                             </div>
@@ -127,17 +126,17 @@ export default function Navbar() {
             {/* Animated Mobile Menu */}
             <div className={`${isMobileMenuOpen ? 'max-h-screen' : 'max-h-0'} sm:hidden overflow-hidden transition-all duration-300 ease-in-out`}>
                 <div className="space-y-1 px-2 pb-3 pt-2">
-                    <Link href="/" className={`block rounded-md px-5 py-2 ${pathname == '/' && 'bg-blue-600 text-white'} text-gray-300 hover:text-white hover:bg-blue-700 text-sm font-medium `} aria-current="page">
+                    <Link onClick={()=>  setIsMobileMenuOpen(!isMobileMenuOpen)} href="/" className={`block rounded-md px-5 py-2 ${pathname == '/' && 'bg-blue-600 text-white'} text-gray-300 hover:text-white hover:bg-blue-700 text-sm font-medium `} aria-current="page">
                         Home
                     </Link>
-                    <Link href="/doctors" className={`block rounded-md px-5 py-2 ${pathname.startsWith('/doctors') && 'bg-blue-600 text-white' } text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                    <Link onClick={()=>  setIsMobileMenuOpen(!isMobileMenuOpen)} href="/doctors" className={`block rounded-md px-5 py-2 ${pathname.startsWith('/doctors') && 'bg-blue-600 text-white' } text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
                         Doctors
                     </Link>
-                    <Link href="#" className={`block rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
-                        Projects
+                    <Link onClick={()=>  setIsMobileMenuOpen(!isMobileMenuOpen)} href="#" className={`block rounded-md px-5 py-2 ${pathname == '/appointments' && 'bg-blue-600 text-white'} text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                        Appointments
                     </Link>
-                    <Link href="#" className={`block rounded-md px-5 py-2 text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
-                        Calendar
+                    <Link onClick={()=>  setIsMobileMenuOpen(!isMobileMenuOpen)} href="#" className={`block rounded-md px-5 py-2 ${pathname == '/contact-us' && 'bg-blue-600 text-white'} text-sm font-medium text-gray-300 hover:bg-blue-700 hover:text-white`}>
+                        Contact Us
                     </Link>
                 </div>
             </div>

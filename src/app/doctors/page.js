@@ -4,7 +4,7 @@ export default function Doctor() {
 
     return (
         <div>
-            <div className="pt-14 border-4">
+            <div className="pt-14">
                 <DoctorSection isHome={false} />
             </div>
         </div>

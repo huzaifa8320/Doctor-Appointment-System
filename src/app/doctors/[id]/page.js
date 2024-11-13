@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { ReactTyped } from "react-typed";
 import 'aos/dist/aos.css';
 import Aos from "aos";
+import BookAppointmentModal from "@/components/BookAppointment";
 
 export default function DoctorDetail({ params }) {
 
@@ -43,11 +44,10 @@ export default function DoctorDetail({ params }) {
                         <p className="mt-6 text-lg">
                             With over {doctorInfo.experience} years of experience in {doctorInfo.specialist}, {doctorInfo.name} offers {doctorInfo.offers}
                         </p>
+                        <p className="text-2xl sm:text-3xl font-semibold mt-6">Fees: ${doctorInfo.fees}</p>
                         {/* Button Section */}
                         <div className="mt-6 flex gap-3 flex-wrap">
-                            <button className="h-12 px-3 bg-[#1E3A8A] hover:bg-[#3b82f6] text-white font-semibold rounded-lg shadow-md transition-all">
-                                Book Appointment
-                            </button>
+                            <BookAppointmentModal/>
                             <button className="h-12 px-3 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1E3A8A] font-semibold rounded-lg shadow-md transition-all">
                                 View Profile
                             </button>
@@ -58,7 +58,7 @@ export default function DoctorDetail({ params }) {
                         <Image
                             width={500}
                             height={500}
-                            className="w-full rounded-lg shadow-xl object-cover"
+                            className="w-full h-96 rounded-lg shadow-xl object-cover"
                             src={doctorInfo.image}
                             alt="Doctor's Image"
                         />
@@ -86,6 +86,14 @@ export default function DoctorDetail({ params }) {
                                 {doctorInfo.availability.map((slot, index) => (
                                     <li key={index}>{slot.day}: {slot.time}</li>
                                 ))}
+                            </ul>
+                        </div>
+                        <div className="mt-8">
+                            <h3 className="text-xl font-semibold text-[#1E3A8A]">
+                                Hospital
+                            </h3>
+                            <ul className="list-disc ml-5 mt-2 text-gray-600">
+                                <li>{doctorInfo.hospital}</li>
                             </ul>
                         </div>
                         {/* Contact Section */}

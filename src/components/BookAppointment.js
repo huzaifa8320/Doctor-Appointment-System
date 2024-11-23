@@ -28,7 +28,7 @@ export default function BookAppointmentModal() {
     };
 
     return (
-        <div className=''>
+        <div>
             <Button
                 type="primary"
                 onClick={showModal}
@@ -43,22 +43,27 @@ export default function BookAppointmentModal() {
                 onCancel={handleCancel}
                 okText="Confirm"
                 cancelText="Cancel"
-                // getContainer={false}  // Render modal directly to the body to avoid extra space
+                centered
                 okButtonProps={{
                     style: { backgroundColor: '#1E3A8A', borderColor: '#1E3A8A' },
                 }}
                 cancelButtonProps={{
                     style: { color: '#3b82f6', borderColor: '#3b82f6' },
                 }}
-                bodyStyle={{ padding: '20px' }}  // Remove body margin
-                style={{ top: 0, margin: '10x' }}
+                bodyStyle={{ padding: '20px' }}
+                style={{
+                    maxWidth: '100%', // For small devices
+                }}
+            
+                className="sm:w-auto px-3 w-full"  // Set responsive width
             >
-                <Form form={form} layout="vertical">
+                <Form form={form} layout="vertical" className=''>
                     <Form.Item
                         label={<span style={{ color: '#1E3A8A' }}>Full Name</span>}
                         name="fullName"
                         rules={[{ required: true, message: 'Please enter your full name' }]}
                     >
+        
                         <Input placeholder="Enter your name" />
                     </Form.Item>
                     <Form.Item
@@ -74,27 +79,9 @@ export default function BookAppointmentModal() {
                         rules={[{ required: true, message: 'Please select a date' }]}
                     >
                         <DatePicker
-                            style={{ width: '100%' }}
+                            style={{ width: '100%'}}
                             disabledDate={(current) => current && current < moment().startOf('day')}
                         />
-                    </Form.Item>
-                    <Form.Item
-                        label={<span style={{ color: '#1E3A8A' }}>Time</span>}
-                        name="appointmentTime"
-                        rules={[{ required: true, message: 'Please select a time' }]}
-                    >
-                        <TimePicker style={{ width: '100%' }} format="HH:mm" />
-                    </Form.Item>
-                    <Form.Item
-                        label={<span style={{ color: '#1E3A8A' }}>Doctor</span>}
-                        name="doctor"
-                        rules={[{ required: true, message: 'Please select a doctor' }]}
-                    >
-                        <Select placeholder="Select a doctor">
-                            <Select.Option value="Dr. Smith">Dr. Smith</Select.Option>
-                            <Select.Option value="Dr. John">Dr. John</Select.Option>
-                            <Select.Option value="Dr. Doe">Dr. Doe</Select.Option>
-                        </Select>
                     </Form.Item>
                 </Form>
             </Modal>

@@ -11,8 +11,8 @@ export default function LoginSignup() {
   const handleTabChange = (key) => setActiveTab(key);
 
   return (
-    <div className="flex h-screen p-5 items-center justify-center bg-gradient-to-r from-[#1E3A8A] to-[#3b82f6]">
-      <div className="w-full relative max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden md:flex">
+    <div className="flex h-screen overflow-auto p-5 justify-center bg-gradient-to-r from-[#1E3A8A] to-[#3b82f6]">
+      <div className="w-full relative max-w-4xl bg-white m-auto shadow-lg rounded-lg overflow-hidden md:flex">
       <button><ArrowLeftOutlined className='absolute left-3 top-3 text-[#1F3C8D] md:text-white text-xl'  onClick={() => window.history.back()}/></button>
         {/* Left Section */}
         <div className="hidden md:flex w-1/2 bg-gradient-to-br from-[#1E3A8A] to-[#3b82f6] text-white p-8 flex-col justify-center">
@@ -42,7 +42,7 @@ export default function LoginSignup() {
         <div className="w-full md:w-1/2 p-8">
           <div className="text-center mb-6">
             <p className="text-[#1E3A8A] text-2xl md:text-3xl font-bold">
-              You'r Healthify
+            You&apos;r Healthify
             </p>
             <p className="text-center text-gray-500 mt-2">
               {activeTab == 'login' ? 'Login or to continue' : 'Signup to continue'}

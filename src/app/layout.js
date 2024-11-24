@@ -1,7 +1,5 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import FooterSection from "@/components/FooterSection";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,9 +24,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar/>
         {children}
-        <FooterSection/>
       </body>
     </html>
   );

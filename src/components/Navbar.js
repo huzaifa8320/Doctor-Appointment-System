@@ -4,10 +4,12 @@ import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { auth } from '../../auth';
+import { signOut } from 'next-auth/react';
 
-export default function Navbar() {
-    const session = null
+export default function Navbar({ session }) {
+
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname();
@@ -101,8 +103,8 @@ export default function Navbar() {
                                         <Image
                                             width={500}
                                             height={500}
-                                            className="h-8 w-8 rounded-full"
-                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                            className="h-10 w-10 rounded-full"
+                                            src={session?.user?.image}
                                             alt=""
                                         />
                                     </button>
@@ -119,9 +121,18 @@ export default function Navbar() {
                                             <Link href="#" onClick={() => setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
                                                 Settings
                                             </Link>
-                                            <Link href="#" onClick={() => setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
+                                            <Link
+                                                href="#"
+                                                onClick={() => {
+                                                    setIsProfileOpen(!isProfileOpen);
+                                                   signOut();
+                                                }}
+                                                className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm"
+                                                role="menuitem"
+                                            >
                                                 Sign out
                                             </Link>
+
                                         </div>
                                     )}
                                 </div> :

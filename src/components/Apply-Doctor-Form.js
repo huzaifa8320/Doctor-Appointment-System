@@ -8,6 +8,7 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 import dayjs from 'dayjs';
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { addRequest } from "@/action/requests";
 
 const { Option } = Select;
 
@@ -35,7 +36,7 @@ const formSchema = z.object({
         .nonempty("At least one availability slot is required"),
 });
 
-export default function ApplyDoctorForm() {
+export default function ApplyDoctorForm({session}) {
     const {
         control,
         handleSubmit,
@@ -62,15 +63,20 @@ export default function ApplyDoctorForm() {
         name: "availability",
     });
 
-    const onSubmit = (values) => {
-        console.log("Form Submitted:", values);
+    const onSubmit = async (values) => {
+
+        console.log("Form Submitted:", values); 
+        values.user = session?.user._id
+        // console.log(values);
+        
+        await addRequest(values)
         message.success("Form submitted successfully!");
         reset()
     };
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-[#1E3A8A] to-[#3b82f6] text-white">
-            <div className="bg-white border-4 relative m-6 text-black p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <div className="bg-white relative m-6 text-black p-6 rounded-lg shadow-lg max-w-lg w-full">
                 <Link href={'/'} className='absolute left-3 top-3 text-[#387CED]'>
                     <ArrowLeftOutlined className='h-4 w-4 mr-2' />
                 </Link>

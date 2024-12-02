@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Input, DatePicker, TimePicker, Select } from 'antd';
 import moment from 'moment';
+import { number } from 'zod';
 
 export default function BookAppointmentModal() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,7 +55,7 @@ export default function BookAppointmentModal() {
                 style={{
                     maxWidth: '100%', // For small devices
                 }}
-            
+
                 className="sm:w-auto px-3 w-full"  // Set responsive width
             >
                 <Form form={form} layout="vertical" className=''>
@@ -63,23 +64,27 @@ export default function BookAppointmentModal() {
                         name="fullName"
                         rules={[{ required: true, message: 'Please enter your full name' }]}
                     >
-        
+
                         <Input placeholder="Enter your name" />
                     </Form.Item>
                     <Form.Item
                         label={<span style={{ color: '#1E3A8A' }}>Contact Number</span>}
                         name="contactNumber"
-                        rules={[{ required: true, message: 'Please enter your contact number' }]}
+                        rules={[
+                            { required: true, message: 'Please enter your contact number' },
+                            { pattern: /^\d+$/, message: 'Contact number must be numeric' },
+                        ]}
                     >
-                        <Input placeholder="Enter your contact number" />
+                        <Input placeholder='Enter Contact Number' maxLength={15} />
                     </Form.Item>
+
                     <Form.Item
                         label={<span style={{ color: '#1E3A8A' }}>Date</span>}
                         name="appointmentDate"
                         rules={[{ required: true, message: 'Please select a date' }]}
                     >
                         <DatePicker
-                            style={{ width: '100%'}}
+                            style={{ width: '100%' }}
                             disabledDate={(current) => current && current < moment().startOf('day')}
                         />
                     </Form.Item>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { ReactTyped } from "react-typed";
 import 'aos/dist/aos.css';
+import Link from "next/link";
 
 export default function HeroSection() {
 
@@ -34,7 +35,7 @@ export default function HeroSection() {
                     <p className="mb-8 leading-relaxed font-medium">Revolutionize your healthcare experience with our intuitive platform, making appointment booking as effortless as enjoying a cold-pressed juice. Connect with compassionate professionals for routine check-ups or specialized care, all just a click away. Take the first step towards a healthier, happier you today!</p>
                     <div className="flex flex-wrap sm:flex-nowrap gap-3">
                         <button className="min-w-40 text-[#1E3A8A] p-2  shadow shadow-[#1E3A8A] font-thi border-[#1E3A8A]  focus:outline-none rounded text-lg">Meet Your Doctor</button>
-                        <button className="min-w-40 text-white p-2 shadow-md focus:outline-none rounded text-lg bg-[#1E3A8A]">Apply as Doctor</button>
+                        <Link href={`/apply-doctor`}><button className="min-w-40 text-white p-2 shadow-md focus:outline-none rounded text-lg bg-[#1E3A8A]">Apply as Doctor</button></Link>
                     </div>
                 </div>
                 <div data-aos="fade-left" className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 flex justify-center">

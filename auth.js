@@ -29,9 +29,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             picture: profile.picture,
         }
         const user = await handleRigister(obj)
-        return user
+        return {user}
       }
-      return true // Do different verification for other providers that don't have `email_verified`
     },
 
     async jwt({ token }) {
@@ -39,9 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.log("user in jwt" , user);
         token.role = user.role;
         token._id = user._id
-        // if (user) { // User is available during sign-in
-        //   token.id = user.id
-        // }
         return token
       },
       session({ session, token }) {

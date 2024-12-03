@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Select, message, TimePicker } from "antd";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,7 +36,10 @@ const formSchema = z.object({
         .nonempty("At least one availability slot is required"),
 });
 
-export default function ApplyDoctorForm({session}) {
+export default function ApplyDoctorForm({ session }) {
+    const [loading, setLoading] = useState(false);
+    // console.log("session", session);
+
     const {
         control,
         handleSubmit,
@@ -45,14 +48,14 @@ export default function ApplyDoctorForm({session}) {
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            name: `${session?.user?.name}`,
             bio: "",
             hospital: "",
             fees: 0,
             specialist: "",
             gender: undefined,
             experience: 0,
-            contact: { phone: "", email: "" },
+            contact: { phone: "", email: `${session?.user?.email}` },
             certifiedFrom: "",
             availability: [{ day: undefined, time: "" }],
         },
@@ -64,14 +67,19 @@ export default function ApplyDoctorForm({session}) {
     });
 
     const onSubmit = async (values) => {
+        setLoading(true)
+        if (!session?.user?._id) {
+            message.error("User session not found");
+            return;
+        }
 
-        console.log("Form Submitted:", values); 
-        values.user = session?.user._id
-        // console.log(values);
-        
-        await addRequest(values)
+        values.user = session.user._id;
+        console.log('Final Data doctor', values);
+
+        await addRequest(values);
         message.success("Form submitted successfully!");
-        reset()
+        setLoading(false)
+        reset();
     };
 
     return (
@@ -84,6 +92,7 @@ export default function ApplyDoctorForm({session}) {
                 <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
                     {/* Name */}
                     <Form.Item
+
                         className="my-8"
                         label="Full Name"
                         validateStatus={errors.name ? "error" : ""}
@@ -92,7 +101,7 @@ export default function ApplyDoctorForm({session}) {
                         <Controller
                             name="name"
                             control={control}
-                            render={({ field }) => <Input placeholder="Enter Your Name" {...field} />}
+                            render={({ field }) => <Input readOnly placeholder="Enter Your Name" {...field} />}
                         />
                     </Form.Item>
 
@@ -222,7 +231,7 @@ export default function ApplyDoctorForm({session}) {
                             <Controller
                                 name="contact.email"
                                 control={control}
-                                render={({ field }) => <Input type="email" placeholder="Enter email address" {...field} />}
+                                render={({ field }) => <Input readOnly type="email" placeholder="Enter email address" {...field} />}
                             />
                         </Form.Item>
                     </Form.Item>
@@ -244,50 +253,51 @@ export default function ApplyDoctorForm({session}) {
                     {/* Availability */}
                     <h3 className="text-lg font-semibold mt-10">Availability</h3>
                     {fields.map((field, index) => (
-                        <div key={field.id} className="flex gap-4 mt-3 mb-8">
-                            {/* Day Selector */}
-                            <Form.Item
-                                validateStatus={errors.availability?.[index]?.day ? "error" : ""}
-                                help={errors.availability?.[index]?.day?.message}
-                                className="w-1/2"
-                            >
-                                <Controller
-                                    name={`availability.${index}.day`}
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select placeholder="Select day" {...field}>
-                                            <Option value="Monday">Monday</Option>
-                                            <Option value="Tuesday">Tuesday</Option>
-                                            <Option value="Wednesday">Wednesday</Option>
-                                            <Option value="Thursday">Thursday</Option>
-                                            <Option value="Friday">Friday</Option>
-                                            <Option value="Saturday">Saturday</Option>
-                                            <Option value="Sunday">Sunday</Option>
-                                        </Select>
-                                    )}
-                                />
-                            </Form.Item>
+                        <div key={field.id} className="sm:flex gap-4 mt-3 mb-8">
+                            <div className="flex w-full gap-4">
+                                {/* Day Selector */}
+                                <Form.Item
+                                    validateStatus={errors.availability?.[index]?.day ? "error" : ""}
+                                    help={errors.availability?.[index]?.day?.message}
+                                    className="w-1/2"
+                                >
+                                    <Controller
+                                        name={`availability.${index}.day`}
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select placeholder="Select day" {...field}>
+                                                <Option value="Monday">Monday</Option>
+                                                <Option value="Tuesday">Tuesday</Option>
+                                                <Option value="Wednesday">Wednesday</Option>
+                                                <Option value="Thursday">Thursday</Option>
+                                                <Option value="Friday">Friday</Option>
+                                                <Option value="Saturday">Saturday</Option>
+                                                <Option value="Sunday">Sunday</Option>
+                                            </Select>
+                                        )}
+                                    />
+                                </Form.Item>
 
-                            {/* Time Selector */}
-                            <Form.Item
-                                validateStatus={errors.availability?.[index]?.time ? "error" : ""}
-                                help={errors.availability?.[index]?.time?.message}
-                                className="w-1/2"
-                            >
-                                <Controller
-                                    name={`availability.${index}.time`}
-                                    control={control}
-                                    render={({ field }) => (
-                                        <TimePicker
-                                            format="HH:mm"
-                                            use12Hours
-                                            placeholder="Select time"
-                                            onChange={(time) => field.onChange(time ? dayjs(time).format("HH:mm") : "")}
-                                        />
-                                    )}
-                                />
-                            </Form.Item>
-
+                                {/* Time Selector */}
+                                <Form.Item
+                                    validateStatus={errors.availability?.[index]?.time ? "error" : ""}
+                                    help={errors.availability?.[index]?.time?.message}
+                                    className="w-1/2"
+                                >
+                                    <Controller
+                                        name={`availability.${index}.time`}
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TimePicker
+                                                format="HH:mm"
+                                                use12Hours
+                                                placeholder="Select time"
+                                                onChange={(time) => field.onChange(time ? dayjs(time).format("HH:mm") : "")}
+                                            />
+                                        )}
+                                    />
+                                </Form.Item>
+                            </div>
 
                             {/* Remove Button */}
                             {fields.length > 1 && (
@@ -310,7 +320,7 @@ export default function ApplyDoctorForm({session}) {
 
                     {/* Submit Button */}
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" block>
+                        <Button type="primary" htmlType="submit" block loading={loading}>
                             Submit Application
                         </Button>
                     </Form.Item>

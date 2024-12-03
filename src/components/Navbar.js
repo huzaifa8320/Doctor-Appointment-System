@@ -9,6 +9,7 @@ import { auth } from '../../auth';
 import { signOut } from 'next-auth/react';
 
 export default function Navbar({ session }) {
+    console.log("session", session);
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -121,17 +122,17 @@ export default function Navbar({ session }) {
                                             <Link href="#" onClick={() => setIsProfileOpen(!isProfileOpen)} className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm" role="menuitem">
                                                 Settings
                                             </Link>
-                                            <Link
+                                            <p
                                                 href="#"
                                                 onClick={() => {
                                                     setIsProfileOpen(!isProfileOpen);
-                                                   signOut();
+                                                    signOut();
                                                 }}
-                                                className="block rounded-md hover:bg-blue-700 px-4 py-3 text-sm"
+                                                className="block cursor-pointer rounded-md hover:bg-blue-700 px-4 py-3 text-sm"
                                                 role="menuitem"
                                             >
                                                 Sign out
-                                            </Link>
+                                            </p>
 
                                         </div>
                                     )}

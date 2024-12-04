@@ -75,7 +75,6 @@ export default function ApplyDoctorForm({ session }) {
 
         // Include the user ID from the session in the submitted data
         values.user = session.user._id;
-        console.log('Final Data doctor', values);
 
         try {
             const response = await addRequest(values);
@@ -210,7 +209,7 @@ export default function ApplyDoctorForm({ session }) {
                             control={control}
                             render={({ field }) => (
                                 <Input
-                                    placeholder="Fees"
+                                    placeholder="$Fees"
                                     {...field}
                                     type="number"
                                     value={field.value || ""}

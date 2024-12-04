@@ -9,7 +9,6 @@ import { auth } from '../../auth';
 import { signOut } from 'next-auth/react';
 
 export default function Navbar({ session }) {
-    console.log("session", session);
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

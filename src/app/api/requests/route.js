@@ -5,11 +5,11 @@ export async function POST(req) {
     await connectDB()
     try {
         const obj = await req.json();
-        
+
         // Check if the user already has a pending or approved request
-        const existingRequest = await RequestModel.findOne({ 
-            user: obj.user, 
-            status: { $in: ['pending', 'approved'] } 
+        const existingRequest = await RequestModel.findOne({
+            user: obj.user,
+            status: { $in: ['pending', 'approved'] }
         });
 
         if (existingRequest) {
@@ -45,6 +45,31 @@ export async function GET(req) {
 }
 
 export async function PUT(req) {
+    await connectDB()
+    try {
+        const obj = await req.json();
+        let { id, status } = obj
+        const updated = await RequestModel.findOneAndUpdate(
+            {
+                _id: id
+            },
+            {
+                status: status
+            }
+        ).exec()
+
+        return Response.json({
+            error: false,
+            msg: "Requests Updated Successfully",
+            requests: updated
+        }, { status: 200 })
+    }
+    catch (err) {
+        return Response.json({
+            error: true,
+            msg: "Something Went Wrong",
+        }, { status: 500 })
+    }
     // Implement update logic if needed
 }
 

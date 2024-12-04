@@ -1,5 +1,8 @@
 'use server'
 
+import { revalidatePath } from "next/cache";
+
+
 export async function addRequest(data) {            
 
     const add = await fetch(`${process.env.BASE_URL}api/requests`, {
@@ -15,8 +18,6 @@ export async function addRequest(data) {
     return add.json();
 }
 
-
-
 export async function getRequest() {            
 
     let request = await fetch(`${process.env.BASE_URL}api/requests`);
@@ -25,3 +26,15 @@ export async function getRequest() {
 
     return request;
 }
+
+export async function updateRequest(id , status) {            
+
+    let request = await fetch(`${process.env.BASE_URL}api/requests`,{
+        method : 'PUT',
+        body: JSON.stringify({id , status})
+    });
+
+    request = request.json();    
+}
+
+

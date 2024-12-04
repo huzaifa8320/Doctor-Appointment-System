@@ -30,19 +30,19 @@ export default function DoctorDetail({ params }) {
                     <div data-aos="fade-right" className="w-full md:w-1/2 text-left">
                         <ReactTyped
                             className="text-3xl sm:text-4xl font-bold"
-                            strings={[doctorInfo.name]}
+                            strings={[doctorInfo?.name]}
                             typeSpeed={50}
                             backSpeed={50}
                             loop
                         />
-                        <p className="mt-2 text-xl">{doctorInfo.specialist}</p>
+                        <p className="mt-2 text-xl">{doctorInfo?.specialist}</p>
                         <div className="flex items-center mt-4">
                             <span>Rating:</span>
                             <span className="ml-2 text-yellow-400">★★★★★</span>
                             <span className="ml-4">20 Reviews</span>
                         </div>
                         <p className="mt-6 text-lg">
-                            With over {doctorInfo.experience} years of experience in {doctorInfo.specialist}, {doctorInfo.name} offers {doctorInfo.offers}
+                            With over {doctorInfo?.experience} years of experience in {doctorInfo.specialist}, {doctorInfo.name} offers {doctorInfo.offers}
                         </p>
                         <p className="text-2xl sm:text-3xl font-semibold mt-6">Fees: ${doctorInfo.fees}</p>
                         {/* Button Section */}
@@ -59,7 +59,7 @@ export default function DoctorDetail({ params }) {
                             width={500}
                             height={500}
                             className="w-full h-96 rounded-lg shadow-xl object-cover"
-                            src={doctorInfo.image}
+                            src={doctorInfo?.image}
                             alt="Doctor's Image"
                         />
                     </div>

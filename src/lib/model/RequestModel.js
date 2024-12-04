@@ -6,7 +6,7 @@ const requestSchema = new Schema({
     user: {type: mongoose.Types.ObjectId , ref : "Users"},
     status :{type : String , default: "pending" , enum : [
          "pending" ,
-          "accepted",
+          "approved",
           "rejected"
         ]},
     name: String,

@@ -38,7 +38,6 @@ const formSchema = z.object({
 
 export default function ApplyDoctorForm({ session }) {
     const [loading, setLoading] = useState(false);
-    // console.log("session", session);
 
     const {
         control,
@@ -67,19 +66,27 @@ export default function ApplyDoctorForm({ session }) {
     });
 
     const onSubmit = async (values) => {
-        setLoading(true)
+        setLoading(true);
         if (!session?.user?._id) {
             message.error("User session not found");
+            setLoading(false);
             return;
         }
 
+        // Include the user ID from the session in the submitted data
         values.user = session.user._id;
         console.log('Final Data doctor', values);
 
-        await addRequest(values);
-        message.success("Form submitted successfully!");
-        setLoading(false)
-        reset();
+        try {
+            const response = await addRequest(values);
+            message.success(response.msg || "Form submitted successfully!");
+            reset();
+        } catch (error) {
+            message.error(error.message || "Failed to submit request. Please try again.");
+            reset();
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

@@ -1,40 +1,165 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Table, Tag, Space, Button, Input, Select, Typography, Spin, message } from 'antd'
-import { SearchOutlined, UserOutlined } from '@ant-design/icons'
+import { SearchOutlined, UserOutlined, EyeOutlined } from '@ant-design/icons'
 import { getRequest, updateRequest } from '@/action/requests'
-import { redirect } from 'next/navigation'
+
+// Search params 
+import { useSearchParams , usePathname, useRouter} from 'next/navigation';
+
 
 const { Title } = Typography
 const { Option } = Select
 
-export default function DoctorAdminRequests({ session }) {
-  if (session?.user?.role != 'admin') {
-    redirect('/')
-  }
+export default function AdminDoctorRequests({requests}) {
+  // console.log('searchParams =>' , searchParams);
   const [doctorRequests, setDoctorRequests] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getRequest()
-        const requestsArray = Array.isArray(data) ? data.requests : (data.requests || [])
-        setDoctorRequests(requestsArray)
-        setLoading(false)
-      } catch (err) {
-        setError(err.message)
-        setLoading(false)
-        message.error('Failed to load doctor requests')
-      }
+  const [updatingId, setUpdatingId] = useState(null)
+  const [expandedRowKeys, setExpandedRowKeys] = useState([])
+  
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  console.log("statusFilter" , statusFilter);
+  
+  useEffect(()=>{
+    let params = new URLSearchParams(searchParams);
+    
+    if (statusFilter) {
+      params.set('status', statusFilter);
+    } else {
+      params.delete('status');
     }
-    fetchData()
+    replace(`${pathname}?${params.toString()}`);
+
+    // console.log("params=>",params);
+
+  } ,[statusFilter])
+  
+  const fetchData = useCallback(async () => {
+    const data = await requests
+    try {
+      const requestsArray = Array.isArray(data) ? data.requests : (data.requests || [])
+      setDoctorRequests(requestsArray)
+      console.log("requestsArray" , data);
+      
+      setLoading(false)
+    } catch (err) {
+      setError(err.message)
+      setLoading(false)
+      message.error('Failed to load doctor requests')
+    }
   }, [])
 
+  useEffect(() => {
+    fetchData()
+  }, [fetchData , requests])
+
+  const handleUpdateRequest = useCallback(async (id, status) => {
+    setUpdatingId(id)
+    try {
+      await updateRequest(id, status)
+      message.success(`Request ${status} successfully`)
+      await fetchData() // Refetch data after update
+    } catch (error) {
+      message.error(`Failed to ${status} request: ${error.message}`)
+    } finally {
+      setUpdatingId(null)
+    }
+  }, [fetchData])
+
+  const handleExpand = (expanded, record) => {
+    setExpandedRowKeys(expanded ? [record._id] : [])
+  }
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      render: (text) => (
+        <span className="flex items-center">
+          <UserOutlined className="mr-2 text-blue-500" />
+          {text}
+        </span>
+      ),
+    },
+    {
+      title: 'Specialist',
+      dataIndex: 'specialist',
+      key: 'specialist',
+      filters: doctorRequests.length > 0 ? 
+        [...new Set(doctorRequests.map(doctor => doctor.specialist))]
+          .filter(Boolean)
+          .map(specialist => ({ text: specialist, value: specialist })) : 
+        [],
+      onFilter: (value, record) => record.specialist?.indexOf(value) === 0,
+    },
+    {
+      title: 'Hospital',
+      dataIndex: 'hospital',
+      key: 'hospital',
+      responsive: ['md'],
+    },
+    {
+      title: 'Experience',
+      dataIndex: 'experience',
+      key: 'experience',
+      sorter: (a, b) => Number(a.experience) - Number(b.experience),
+      responsive: ['lg'],
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => (
+        <Tag color={status === 'pending' ? 'gold' : status === 'rejected' ? 'red' : 'green'}>
+          {(status || 'Unknown').toUpperCase()}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle" className="flex flex-wrap">
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => handleExpand(expandedRowKeys[0] !== record._id, record)}
+            className="bg-blue-500 w-20 text-white hover:bg-blue-600 transition-colors duration-300"
+          >
+            View
+          </Button>
+          {record.status === 'pending' && (
+            <>
+              <Button
+                type="primary"
+                className="bg-green-500 w-20 hover:bg-green-600 transition-colors duration-300"
+                onClick={() => handleUpdateRequest(record._id, 'approved')}
+                loading={updatingId === record._id}
+              >
+                Approve
+              </Button>
+              <Button
+                danger
+                className="hover:bg-red-600 w-20 transition-colors duration-300"
+                onClick={() => handleUpdateRequest(record._id, 'rejected')}
+                loading={updatingId === record._id}
+              >
+                Reject
+              </Button>
+            </>
+          )}
+        </Space>
+      ),
+    },
+  ]
 
   const expandedRowRender = (record) => {
     return (
@@ -74,108 +199,7 @@ export default function DoctorAdminRequests({ session }) {
     )
   }
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      render: (text) => (
-        <span className="flex items-center">
-          <UserOutlined className="mr-2 text-blue-500" />
-          {text}
-        </span>
-      ),
-    },
-    {
-      title: 'Specialist',
-      dataIndex: 'specialist',
-      key: 'specialist',
-      filters: doctorRequests.length > 0 ?
-        [...new Set(doctorRequests.map(doctor => doctor.specialist))]
-          .filter(Boolean)
-          .map(specialist => ({ text: specialist, value: specialist })) :
-        [],
-      onFilter: (value, record) => record.specialist?.indexOf(value) === 0,
-    },
-    {
-      title: 'Hospital',
-      dataIndex: 'hospital',
-      key: 'hospital',
-      responsive: ['md'],
-    },
-    {
-      title: 'Experience',
-      dataIndex: 'experience',
-      key: 'experience',
-      sorter: (a, b) => Number(a.experience) - Number(b.experience),
-      responsive: ['lg'],
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (
-        <Tag color={status === 'pending' ? 'gold' : status === 'rejected' ? 'red' : 'green'}>
-          {(status || 'Unknown').toUpperCase()}
-        </Tag>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (record) => (
-        <Space size="middle" className="flex flex-wrap">
-          {record.status === 'pending' && (
-            <>
-              <Button
-  onClick={async () => {
-    try {
-      await updateRequest(record._id, 'approved');
-      setDoctorRequests((prevRequests) =>
-        prevRequests.map((request) =>
-          request._id === record._id ? { ...request, status: 'approved' } : request
-        )
-      );
-    } catch (error) {
-      message.error('Failed to approve the request');
-    }
-  }}
-  type="primary"
-  className="bg-green-500 w-20 hover:bg-green-600 transition-colors duration-300"
->
-  Approve
-</Button>
-
-<Button
-  onClick={async () => {
-    try {
-      await updateRequest(record._id, 'rejected');
-      setDoctorRequests((prevRequests) =>
-        prevRequests.map((request) =>
-          request._id === record._id ? { ...request, status: 'rejected' } : request
-        )
-      );
-    } catch (error) {
-      message.error('Failed to reject the request');
-    }
-  }}
-  danger
-  className="hover:bg-red-600 w-20 transition-colors duration-300"
->
-  Reject
-</Button>
-
-            </>
-          )}
-        </Space>
-      ),
-    },
-  ]
-
-
-
-  const filteredData = doctorRequests.filter(doctor =>
+  const filteredData = doctorRequests.filter(doctor => 
     doctor.name?.toLowerCase().includes(searchText.toLowerCase()) &&
     (statusFilter === 'all' || doctor.status === statusFilter)
   )
@@ -198,7 +222,7 @@ export default function DoctorAdminRequests({ session }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4 sm:p-6 md:p-8">
-      <p level={2} className="mb-6 text-2xl text-center font-semibold sm:text-3xl text-indigo-800">Doctor Application Requests</p>
+      <p  className="mb-6 text-2xl sm:text-3xl font-semibold text-center text-indigo-800">Doctor Application Requests 👨‍⚕</p>
       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           <Input
@@ -227,13 +251,12 @@ export default function DoctorAdminRequests({ session }) {
           rowKey={(record) => record._id || record.id || Math.random().toString()}
           expandable={{
             expandedRowRender,
-            // expandRowByClick: true,
+            expandedRowKeys,
+            onExpand: handleExpand,
           }}
           className="shadow-sm"
           pagination={{
             pageSize: 10,
-            showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50'],
           }}
           scroll={{ x: true }}
         />
@@ -241,4 +264,3 @@ export default function DoctorAdminRequests({ session }) {
     </div>
   )
 }
-

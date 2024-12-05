@@ -79,10 +79,10 @@ export default function ApplyDoctorForm({ session }) {
         try {
             const response = await addRequest(values);
             message.success(response.msg || "Form submitted successfully!");
-            reset();
+            // reset();
         } catch (error) {
             message.error(error.message || "Failed to submit request. Please try again.");
-            reset();
+            // reset();
         } finally {
             setLoading(false);
         }

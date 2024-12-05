@@ -18,13 +18,16 @@ export async function addRequest(data) {
     return add.json();
 }
 
-export async function getRequest() {            
+export async function getRequest(status) {            
+console.log('log status' , status);
 
-    let request = await fetch(`${process.env.BASE_URL}api/requests`);
-
+    
+    let request = await fetch(`${process.env.BASE_URL}api/requests?status=${status ? status : ""}`);
+    
     request = request.json();
-
+    
     return request;
+
 }
 
 export async function updateRequest(id , status) {            
@@ -34,7 +37,7 @@ export async function updateRequest(id , status) {
         body: JSON.stringify({id , status})
     });
 
-    request = request.json();    
+    request = request.json();   
+    revalidatePath('/')
+     
 }
-
-

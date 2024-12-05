@@ -36,7 +36,15 @@ export async function POST(req) {
 
 export async function GET(req) {
     await connectDB()
-    const requests = await RequestModel.find();
+    const query = {};
+    const status = req?.nextUrl?.searchParams?.get("status");
+    if (status && status != "all") {
+      query.status = status;
+    }
+    console.log("status in backend =>" , status );
+    
+    
+    const requests = await RequestModel.find(query).populate("user");
     return Response.json({
         error: false,
         msg: "All Requests Fetched Successfully",
